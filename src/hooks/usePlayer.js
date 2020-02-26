@@ -3,28 +3,25 @@ import React, { useEffect, useState } from "react";
 const usePlayer = () => {
   const [player, setPlayer] = useState(null);
 
-  useEffect(() => {
-    //Initialize Player Instance
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const playerInstance = new window.Spotify.Player({
-        name: "Default Player",
-        getOAuthToken: cb => cb(localStorage.getItem("access_token")),
-        volume: 0.2
-      });
+  window.onSpotifyWebPlaybackSDKReady = () => {
+    const playerInstance = new window.Spotify.Player({
+      name: "Default Player",
+      getOAuthToken: cb => cb(localStorage.getItem("access_token")),
+      volume: 0.2
+    });
 
-      playerInstance.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
-      });
+    playerInstance.addListener("ready", ({ device_id }) => {
+      console.log("Ready with Device ID", device_id);
+    });
 
-      playerInstance.addListener("player_state_changed", state => {
-        console.log("player_state_changed", state);
-      });
+    playerInstance.addListener("player_state_changed", state => {
+      console.log("player_state_changed", state);
+    });
 
-      playerInstance.connect();
+    playerInstance.connect();
 
-      setPlayer(playerInstance);
-    };
-  }, []);
+    setPlayer(playerInstance);
+  };
 
   //Play music via player using Spotify uri.
   const playTrack = spotify_uri => {
