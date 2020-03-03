@@ -1,15 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
-import { AuthContext } from "../context/AuthProvider";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { user } = useContext(AuthContext);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 
   return (
     <Route
       {...rest}
       render={props =>
-        user ? <Component {...props} /> : <Redirect to={{ pathname: "/authorize", state: { from: props.location } }} />
+        isAuthenticated ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{ pathname: "/authorize", state: { from: props.location } }} />
+        )
       }
     />
   );
